@@ -50,7 +50,17 @@ async function refresh() {
           if (result.analyzed_seconds < result.duration_seconds) interpretation += ' · ' + (result.coverage_policy || 'Partial audio coverage');
         }
         const values = [names[model] || model, interpretation, result?.score !== undefined ? result.score.toFixed(6) : '—', result ? `${result.seconds}s` : '—', result?.error || result?.status || (job.current === model ? 'running' : job.status === 'failed' ? 'not run' : 'waiting')];
-        for (const value of values) row.append(node('td', value));
+        for (const [index, value] of values.entries()) {
+          const cell = node('td', value);
+          if (index === 2 && result?.score !== undefined) {
+            const leaning = result.score >= .5 ? 'synthetic' : 'genuine';
+            const meter = document.createElement('meter');
+            meter.min = '0'; meter.max = '1'; meter.value = String(result.score);
+            meter.setAttribute('aria-label', `Decision score ${value}, leans ${leaning}`);
+            cell.replaceChildren(meter, document.createTextNode(' ' + value + ' · leans ' + leaning));
+          }
+          row.append(cell);
+        }
         table.append(row);
       }
       wrap.append(table); card.append(wrap); $('results').append(card);
@@ -72,8 +82,12 @@ $('form').addEventListener('submit', async event => {
   finally { submitting = false; $('mode-picker').disabled = false; updateMode(); }
 });
 $('refresh').addEventListener('click', refresh);
+function showAudioFileName() {
+  const file = $('audio').files[0];
+  $('audio-file-name').textContent = file ? file.name : 'No file chosen';
+}
+$('audio').addEventListener('change', showAudioFileName);
 fetch(API + '/models').then(r => r.json()).then(data => {
-  document.querySelector('.eyebrow').textContent = 'ONE RECORDING. ' + data.models.length + ' DETECTORS.';
   for (const model of data.models) {
     names[model.id] = model.name;
     const label = node('label', ''), input = document.createElement('input');
@@ -90,6 +104,20 @@ fetch(API + '/models').then(r => r.json()).then(data => {
 }).catch(() => { $('message').textContent = 'Could not load detector list. Retry after the server is available.'; });
 setInterval(() => { if (unlocked && $('key').value) refresh(); }, 2000);
 
+const navLinks = [...document.querySelectorAll('.top nav a[href^="#"]')];
+const navSections = navLinks.map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
+if ('IntersectionObserver' in window) {
+  const observer = new IntersectionObserver(entries => {
+    const current = entries.filter(entry => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+    if (!current) return;
+    navLinks.forEach(link => {
+      if (link.getAttribute('href') === '#' + current.target.id) link.setAttribute('aria-current', 'true');
+      else link.removeAttribute('aria-current');
+    });
+  }, {rootMargin:'-30% 0px -55% 0px', threshold:[.01, .5]});
+  navSections.forEach(section => observer.observe(section));
+}
+
 // The catalog supplies labels and provenance only; every score is computed fresh.
 let sampleCatalog = [], visibleSamples = [];
 function currentSample() { return visibleSamples.find(s => s.id === $('sample-select').value); }
@@ -103,6 +131,7 @@ function showSample() {
     $('sample-details').textContent = 'No recordings match your search.'; return;
   }
   $('sample-player').src = sample.file;
+  window.hearsayPlayer?.pair(['sample-player'], 250);
   $('sample-download').href = sample.file;
   $('sample-details').replaceChildren(document.createTextNode(`${sample.title} · ${sample.label === 'real' ? 'Real' : 'Synthetic'} · ${sample.duration.toFixed(2)} seconds · ${sample.collection} · `));
   const source = node('a', 'Dataset source'); source.href = sample.source;
@@ -126,7 +155,7 @@ $('sample-use').addEventListener('click', async () => {
     if (!response.ok) throw new Error('Could not load recording. Please retry.');
     const transfer = new DataTransfer();
     transfer.items.add(new File([await response.blob()], `${sample.title.replace(/[^a-z0-9 -]/gi, '')}-${sample.label}-${sample.id}.mp3`, {type:'audio/mpeg'}));
-    $('audio').files = transfer.files; $('expected').value = sample.label;
+    $('audio').files = transfer.files; showAudioFileName(); $('expected').value = sample.label;
     $('sample-status').textContent = `${sample.title} (${sample.label}) selected. Enter your access code, choose a mode, then click Run.`;
     $('form').scrollIntoView({behavior:'smooth', block:'start'});
   } catch (error) { $('sample-status').textContent = error.message; }

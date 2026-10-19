@@ -34,8 +34,12 @@
       el(`guess-${side}`).disabled = true;
       el(`answer-${side}`).textContent = '';
       el(`analyze-${side}`).hidden = true;
+      el(`game-${side}-tag`).textContent = 'Not played yet';
+      el(`game-${side}-tag`).classList.remove('heard');
       el(`game-${side}`).closest('article').classList.remove('revealed-real','revealed-synthetic');
     });
+    window.hearsayPlayer?.pair(['game-a', 'game-b']);
+    el('game-recovery')?.remove();
     el('game-next').disabled = true;
     feedback('Play both recordings to unlock your guess. You can replay them as often as you like.');
   }
@@ -46,12 +50,13 @@
     tally();
     ['a','b'].forEach((side, i) => {
       el(`guess-${side}`).disabled = true;
-      el(`answer-${side}`).textContent = `${clips[i].label === 'real' ? 'Genuine recording' : 'Synthetic recording'} · Dataset label`;
+      el(`answer-${side}`).textContent = `${clips[i].label === 'real' ? '● Genuine recording' : '◆ Synthetic recording'} · Dataset label, not a HEARSAY prediction.`;
       el(`game-${side}`).closest('article').classList.add(`revealed-${clips[i].label}`);
       el(`analyze-${side}`).hidden = false;
     });
     feedback(`${won ? 'You got it.' : 'That one fooled you.'} Recording ${clips[0].label === 'synthetic' ? 'A' : 'B'} is labeled synthetic. Different recording conditions can be misleading; this reveal does not identify which acoustic cue caused your choice. Try HEARSAY on either clip below.`);
     el('game-next').disabled = false;
+    el('game-next').focus();
   }
   async function analyze(index) {
     if (!answered || loading) return;
@@ -62,7 +67,7 @@
       if (!response.ok) throw new Error('Recording could not be loaded. Try again.');
       const transfer = new DataTransfer();
       transfer.items.add(new File([await response.blob()], `${clip.title.replace(/[^a-z0-9 -]/gi,'')}-${clip.label}-${clip.id}.mp3`, {type:'audio/mpeg'}));
-      el('audio').files = transfer.files; el('expected').value = clip.label;
+      el('audio').files = transfer.files; el('audio-file-name').textContent = transfer.files[0].name; el('expected').value = clip.label;
       el('message').textContent = `Game recording ${index === 0 ? 'A' : 'B'} selected (${clip.title}, ${clip.label}). Enter your access code, select a mode and run a fresh analysis.`;
       el('form').scrollIntoView({behavior:'smooth',block:'start'});
       el('key').focus({preventScroll:true});
@@ -76,12 +81,22 @@
     el(`game-${side}`).addEventListener('play', () => {
       el(`game-${index === 0 ? 'b' : 'a'}`).pause();
       heard.add(side);
+      el(`game-${side}-tag`).textContent = 'Heard';
+      el(`game-${side}-tag`).classList.add('heard');
       if (!answered && heard.size === 2) {
         el('guess-a').disabled = false; el('guess-b').disabled = false;
         feedback('Which recording sounds synthetic? Make your choice, or listen again.');
       }
     });
-    el(`game-${side}`).addEventListener('error', () => feedback('Audio could not load. Reload the page to retry.'));
+    el(`game-${side}`).addEventListener('error', () => {
+      feedback("This clip couldn't load. Choose another pair to continue.");
+      if (!el('game-recovery')) {
+        const recovery = document.createElement('button');
+        recovery.id = 'game-recovery'; recovery.type = 'button'; recovery.className = 'btn ghost compact';
+        recovery.textContent = 'Try another pair'; recovery.addEventListener('click', round);
+        el('game-feedback').parentElement.append(recovery);
+      }
+    });
     el(`guess-${side}`).addEventListener('click', () => guess(index));
     el(`analyze-${side}`).addEventListener('click', () => analyze(index));
   });
@@ -94,7 +109,9 @@
     catalog = new Map(samples.map(s => [s.id,s]));
     pairs = sourcePairs.filter(p => catalog.get(p.real)?.label === 'real' && catalog.get(p.fake)?.label === 'synthetic');
     if (!pairs.length) throw new Error();
-    [...new Set(pairs.map(p => p.speaker))].sort().forEach(speaker => {
+    const speakers = [...new Set(pairs.map(p => p.speaker))].sort();
+    el('game-speaker').options[0].textContent = 'All ' + speakers.length + ' speakers · ' + pairs.length + ' pairs · ' + (pairs.length * 2) + ' clips';
+    speakers.forEach(speaker => {
       const option = document.createElement('option'); option.value = speaker; option.textContent = speaker;
       el('game-speaker').append(option);
     });
@@ -105,6 +122,13 @@
     const fake = prevalence * 10, caught = Math.round(fake * .9), falseAlarms = Math.round((1000 - fake) * .05);
     el('prevalence-value').textContent = `${prevalence}%`;
     el('base-rate-result').textContent = `Of 1,000 recordings: ${fake} are synthetic. About ${caught} fakes are caught and ${falseAlarms} genuine recordings are wrongly flagged. Roughly ${Math.round(caught / (caught + falseAlarms) * 100)}% of flagged recordings are actually synthetic. About ${fake - caught} fakes are missed.`;
+    const dots = el('prevalence-dots'); dots.replaceChildren();
+    for (let i = 0; i < 50; i++) {
+      const dot = document.createElement('i');
+      if (i < Math.round(caught / 20)) dot.className = 'f';
+      else if (i < Math.round((caught + falseAlarms) / 20)) dot.className = 'w';
+      dots.append(dot);
+    }
   }
   el('prevalence').addEventListener('input', illustrate); illustrate();
 })();

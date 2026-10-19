@@ -11,6 +11,18 @@ from hearsay.benchmark.dashboard import MODELS, command_for, parse_score
 from server.routers import hearsay_compare as api
 
 
+COMPARE_INDEX = Path(__file__).resolve().parents[1] / 'apps' / 'hearsay-compare' / 'index.html'
+EXPECTED_CSP = "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'"
+
+
+class ComparisonMarkupTests(unittest.TestCase):
+    def test_csp_is_preserved_verbatim(self):
+        self.assertIn(f'<meta http-equiv="Content-Security-Policy" content="{EXPECTED_CSP}">', COMPARE_INDEX.read_text())
+
+    def test_hero_eyebrow_keeps_its_identity_copy(self):
+        self.assertIn('id="hero-eyebrow" class="eyebrow">Audio deepfake detection · Built solo by Alex Picon', COMPARE_INDEX.read_text())
+
+
 class ComparisonSecurityTests(unittest.TestCase):
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory()
