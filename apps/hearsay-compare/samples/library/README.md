@@ -2,7 +2,7 @@
 
 Author: Alex Picon <alexnpc@me.com>
 
-122 MP3 demonstration clips restored byte-for-byte from the original recording
+118 MP3 demonstration clips restored byte-for-byte from the original recording
 library: 96 public-figure clips and 26 modern speech clips. The public-figure
 selection includes four real/synthetic JFK pairs. Catalog labels come from the
 source datasets; they are not predictions from the current HEARSAY models.

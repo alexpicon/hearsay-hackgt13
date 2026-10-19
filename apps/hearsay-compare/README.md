@@ -9,7 +9,7 @@ credits are in `samples/`. See `MODEL_CREDITS.md` for model usage restrictions.
 
 ## Listening game and learning sections
 
-The home page includes 48 genuine/synthetic pairs across 14 speakers. Pair order
+The home page includes 44 genuine/synthetic pairs across 14 speakers. Pair order
 and A/B placement are randomized. Playing both clips unlocks one guess per round;
 the reveal uses dataset labels, not a saved model prediction. Session scores stay
 in memory. Speaker selection, score reset, and per-clip handoff to the existing
@@ -36,4 +36,4 @@ Source statistics were checked on September 27, 2026:
 Browser verification covered correct and wrong guesses, one vote per round,
 nonrepeating pairs within a deck, all four JFK pairs, score reset, selection for
 analysis, slider calculations, and a 390px mobile viewport without overflow.
-All 48 pairs were checked against the recording catalog for labels and speakers.
+All 44 pairs were checked against the recording catalog for labels and speakers.

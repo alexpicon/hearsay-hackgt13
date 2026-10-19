@@ -680,16 +680,6 @@
     "sha256": "af17ec06573c7ca64299ea14961040d5ab39b82dc076dd9715af3ee752470df4"
   },
   {
-    "id": "ITW_2240",
-    "title": "George W. Bush",
-    "label": "synthetic",
-    "duration": 4.29,
-    "collection": "Public figures",
-    "source": "https://huggingface.co/datasets/SpeechAntiSpoofingBenchmarks/InTheWild",
-    "file": "samples/library/ITW_2240.mp3",
-    "sha256": "6a7d11c95895abafeada2bcda9f91394b423be604c5f45f8678bfc6d0d5570a2"
-  },
-  {
     "id": "ITW_24195",
     "title": "George W. Bush",
     "label": "synthetic",
@@ -980,16 +970,6 @@
     "sha256": "71a1502955b15f4c9213835b7daf376ec5bff62108234adb39190cd9e26005be"
   },
   {
-    "id": "ITW_18132",
-    "title": "Orson Welles",
-    "label": "real",
-    "duration": 6.83,
-    "collection": "Public figures",
-    "source": "https://huggingface.co/datasets/SpeechAntiSpoofingBenchmarks/InTheWild",
-    "file": "samples/library/ITW_18132.mp3",
-    "sha256": "64646c139f93f81ccb39244f825df7f3a5fb2040f2ab59874673ec9259f116b4"
-  },
-  {
     "id": "ITW_25876",
     "title": "Orson Welles",
     "label": "real",
@@ -1120,16 +1100,6 @@
     "sha256": "e3ad999810193906e5dc3a8cf81d3ba494a2d5bb3a3049a32200ab1960c67c51"
   },
   {
-    "id": "ITW_9670",
-    "title": "The Notorious B.I.G.",
-    "label": "real",
-    "duration": 2.56,
-    "collection": "Public figures",
-    "source": "https://huggingface.co/datasets/SpeechAntiSpoofingBenchmarks/InTheWild",
-    "file": "samples/library/ITW_9670.mp3",
-    "sha256": "622ab805443e6ac794c317c524493a148063761fea40936914fa84860133bf16"
-  },
-  {
     "id": "ITW_10043",
     "title": "The Notorious B.I.G.",
     "label": "synthetic",
@@ -1148,16 +1118,6 @@
     "source": "https://huggingface.co/datasets/SpeechAntiSpoofingBenchmarks/InTheWild",
     "file": "samples/library/ITW_18168.mp3",
     "sha256": "338aebc47794aade8a05ce2aee9d25bf9d422f4307ae90ca663a56675b8bc73e"
-  },
-  {
-    "id": "ITW_20693",
-    "title": "The Notorious B.I.G.",
-    "label": "synthetic",
-    "duration": 2.88,
-    "collection": "Public figures",
-    "source": "https://huggingface.co/datasets/SpeechAntiSpoofingBenchmarks/InTheWild",
-    "file": "samples/library/ITW_20693.mp3",
-    "sha256": "f16c4c9199d1e77832eed6eab8146ae14e5987907f31a830e9af81446522f62b"
   },
   {
     "id": "ITW_27588",
