@@ -13,3 +13,7 @@ __pycache__/
 *.key
 hearsay/dist/
 hearsay/build/
+
+# Local working notes
+HANDOFF.md
+design/

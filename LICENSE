@@ -1,0 +1,10 @@
+Copyright (c) 2026 Alexander Picon and Chaski AI (https://chaski.ai). All rights reserved.
+
+Hearsay, including its source code and documentation, is proprietary software of Alexander
+Picon and Chaski AI.
+
+No license is granted to use, copy, modify, or distribute the software or its documentation, in
+whole or in part, except by written permission from Chaski AI. To ask for permission, contact
+Chaski AI at https://chaski.ai.
+
+Third-party components remain under their own licenses. Among them are the pretrained models listed in apps/hearsay-compare/MODEL_CREDITS.md (DF-Arena is restricted to research and non-commercial use), the demonstration audio credited in apps/hearsay-compare/samples/README.md, and the portraits credited in apps/hearsay-compare/portraits/catalog.json.
