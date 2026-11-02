@@ -2,11 +2,28 @@
 
 **Is this voice real, or AI-generated?** Upload a recording and Hearsay gives it a score from 0 (real) to 1 (synthetic), in a fast mode or a more careful one.
 
-🏆 **1st place, National Security Agency (NSA) track, HackGT 13** (September 2026). Hearsay had the lowest error of all entries on the hidden test set (minDCF **0.0147**, about 40% lower than 2nd place). The organizers noted that with scores this close at the top, documentation and explainability decided the winners.
+🏆 **1st place, National Security Agency (NSA) HEARSAY challenge, HackGT 13** (September 2026), entered as **team Keeper**. Keeper had the lowest error of every entry on the hidden test set: minDCF **0.0147**, about 41% below 2nd place.
 
 **[Live site](https://hearsay-ai.tech)**: the listening game is open to everyone. Analyzing your own audio needs an access code.
 
-Built solo by [Alex Picon](https://github.com/alexpicon).
+Built solo by [Alex Picon](https://github.com/alexpicon) — Keeper was a one-person team.
+
+### Official leaderboard
+
+Posted by the NSA challenge organizers in the HackGT Discord on September 27, 2026 ([screenshot](docs/nsa-leaderboard-2026-09-27.png)):
+
+| Team | minDCF |
+|---|---|
+| **Keeper** | **0.0147** |
+| Hearsay-hgt13 | 0.0248 |
+| SideQuests | 0.0273 |
+| GeorgiaMellon | 0.03129 |
+| Cross Exam | 0.073 |
+| Gemini | 0.1027 |
+| Proof Voice | 0.1752 |
+| Verity | 0.1773 |
+
+The remaining entries were near 1.0. The organizers' note alongside the table: *"since there is so much bunching at top the remaining documentation and explainability are crucial for the challenge winners."* minDCF was 60% of the grade; creativity and documentation were the other 40%, and the published points formula compressed the top of the table hard enough that those 40 points decided the placings.
 
 ## What it does
 

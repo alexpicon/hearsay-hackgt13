@@ -26,8 +26,15 @@ The underlying input manifest and batch logs remain in private storage.
 The Accuracy model samples up to three spaced 4.0375-second windows and combines
 that feature path with the original detector's bounded analysis. This export
 uses the deployed coverage policy; it does not claim full temporal coverage of
-long recordings. Hidden-test accuracy and minDCF remain unknown. Format and
-reproduction checks are not evidence of correctness on the hidden labels.
+long recordings. Format and reproduction checks are not evidence of correctness
+on the hidden labels; they were written before any hidden-test result existed.
+
+The organizers later published the hidden-test result: this export scored
+**minDCF 0.0147** as team Keeper, first of all entries (see the leaderboard in
+the top-level [README](../../README.md)). Clip-level hidden labels and the
+organizers' exact score direction and prior were never released, so that figure
+cannot be reproduced here; `accuracy_validation.json` is left as the record of
+what was actually checked at submission time.
 
 ## Original export
 
